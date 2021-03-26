@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const database = require('./config/database');
 const urlsRouter = require('./routes/urls_router');
 const redirectRouter = require('./routes/redirect_router');
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
+app.use(cookieParser());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Welcome to url shortant');
