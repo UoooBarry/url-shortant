@@ -10,9 +10,10 @@ router.get('/:id/', async (req, res) => {
 router.post('/', async (req, res) => {
   uuid = generateUID();
   try{
+    formated_url = validateUrl(req.body.url)
     url = await Url.create({
       uuid: uuid,
-      original_url: validateUrl(req.body.url)
+      original_url: formated_url
     })
     res.json({payload: url})
   }catch(e){
@@ -36,11 +37,14 @@ function generateUID() {
 }
 
 function validateUrl(str){
-  if(/(http(s?)):\/\//i.test(str)){
-    return str
-  }else{
-    return `https://${str}`
+  const url_regex = new RegExp("[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?")
+  if (url_regex.test(str)) {
+    // Force the url into https://xxx
+    str = /(http(s?)):\/\//i.test(str) ? str : `https://${str}`;
+  } else {
+    throw 'Bad URL format';
   }
+  return str;
 }
 
 module.exports = router;
