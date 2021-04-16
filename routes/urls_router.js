@@ -38,7 +38,7 @@ function generateUID() {
 
 function validateUrl(str){
   const url_regex = new RegExp("[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?")
-  if (url_regex.test(str)) {
+  if (url_regex.test(str) || /(http(s?)):\/\//i.test(str)) {
     // Force the url into https://xxx
     str = /(http(s?)):\/\//i.test(str) ? str : `https://${str}`;
   } else {
